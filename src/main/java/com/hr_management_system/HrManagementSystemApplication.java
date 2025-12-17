@@ -29,8 +29,6 @@ public class HrManagementSystemApplication {
 		employee1.setSalary(new BigDecimal("25000"));
 		System.out.println("Invalid salary (25000): " + employee1.isValidSalary());
 
-
-
 	}
 
 }
