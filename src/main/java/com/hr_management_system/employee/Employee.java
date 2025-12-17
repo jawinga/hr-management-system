@@ -26,7 +26,10 @@ public class Employee {
     private String firstName;
     private String lastName;
     @Email
+    @Column(unique = true)
     private String companyEmail;
+    @Email
+    private String email;
     @Pattern(regexp = "^(\\+\\d{1,3}( )?)?((\\(\\d{3}\\))|\\d{3})[- .]?\\d{3}[- .]?\\d{4}$"
             + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?){2}\\d{3}$"
             + "|^(\\+\\d{1,3}( )?)?(\\d{3}[ ]?)(\\d{2}[ ]?){2}\\d{2}$",
@@ -76,6 +79,15 @@ public class Employee {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
 
     public String getCompanyEmail() {
         return companyEmail;
