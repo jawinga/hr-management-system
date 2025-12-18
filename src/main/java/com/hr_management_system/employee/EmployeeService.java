@@ -1,5 +1,6 @@
 package com.hr_management_system.employee;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,11 +37,27 @@ public class EmployeeService {
 
     }
 
+    public void deleteEmployee(Long id){
+
+        if(id == null){
+            throw new IllegalArgumentException("Could not find Id of user");
+        }
+
+        if (!employeeRepository.existsById(id)){
+            throw new EntityNotFoundException("Employee with ID " + id + " not found");
+        }
+
+        employeeRepository.deleteById(id);
+
+    }
+
 
     boolean companyEmailIsUnique(String email){
 
         return !employeeRepository.existsByCompanyEmail(email);
     }
+
+
 
 
 

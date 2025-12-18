@@ -1,5 +1,6 @@
 package com.hr_management_system.employee;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,23 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@Valid  @RequestBody Employee e){
+    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee e){
 
         Employee employee = employeeService.createEmployee(e);
         return ResponseEntity.status(HttpStatus.CREATED).body(employee);
 
     }
+
+    @DeleteMapping("/employees/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
+        try {
+            employeeService.deleteEmployee(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
 }
