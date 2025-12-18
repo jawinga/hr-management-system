@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/employees")
 @RequiredArgsConstructor
@@ -43,6 +46,25 @@ public class EmployeeController {
 
         Employee employee = employeeService.updateEmployee(e);
         return ResponseEntity.status(HttpStatus.OK).body(employee);
+
+    }
+
+
+    @GetMapping("/employees/{id}")
+    public ResponseEntity<?> getEmployee(@PathVariable("id") Long id){
+
+        try{
+
+            Employee employee = employeeService.findEmployee(id);
+            return ResponseEntity.status(HttpStatus.OK).body(employee);
+
+
+        }catch (EntityNotFoundException e){
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+
+        }
 
     }
 

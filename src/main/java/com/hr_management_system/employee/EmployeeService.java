@@ -51,24 +51,33 @@ public class EmployeeService {
 
     void validateEmployee(Employee e){
 
-            if(!e.isValidSalary()) {
-                throw new IllegalArgumentException("Salary must be between position's min and max range");
-            }
+        if(!e.isValidSalary()) {
+            throw new IllegalArgumentException("Salary must be between position's min and max range");
+        }
 
-            if((e.getFirstName() == null || e.getFirstName().isEmpty() || e.getLastName() == null || e.getLastName().isEmpty())){
-                throw new IllegalArgumentException("Employee must have first and last name");
-            }
+        if((e.getFirstName() == null || e.getFirstName().isEmpty() || e.getLastName() == null || e.getLastName().isEmpty())){
+            throw new IllegalArgumentException("Employee must have first and last name");
+        }
 
-            if(e.getEmail().isEmpty()){
-                throw new IllegalArgumentException("Employee must have company email");
-            }
+        if(e.getEmail().isEmpty()){
+            throw new IllegalArgumentException("Employee must have company email");
+        }
 
-            if(!companyEmailIsUnique(e.getCompanyEmail(), e.getId())){
-                throw new IllegalArgumentException("Please use a unique email");
+        if(!companyEmailIsUnique(e.getCompanyEmail(), e.getId())){
+            throw new IllegalArgumentException("Please use a unique email");
 
-            }
+        }
 
     }
+
+    public Employee findEmployee(Long id){
+        if(id == null) throw new IllegalArgumentException("Id not provided");
+
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
+
+
 
 
 
