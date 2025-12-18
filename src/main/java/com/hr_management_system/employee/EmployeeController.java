@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,7 +28,7 @@ public class EmployeeController {
 
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
         try {
             employeeService.deleteEmployee(id);
@@ -37,7 +38,7 @@ public class EmployeeController {
         }
     }
 
-    @PutMapping("/employees/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable("id")Long id, @Valid @RequestBody Employee e){
 
         if(!id.equals(e.getId())){
@@ -50,7 +51,7 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/employees/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getEmployee(@PathVariable("id") Long id){
 
         try{
@@ -65,6 +66,14 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 
         }
+
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllEmployees() {
+
+            List<Employee> list = employeeService.findAllEmployees();
+            return ResponseEntity.ok(list);
 
     }
 

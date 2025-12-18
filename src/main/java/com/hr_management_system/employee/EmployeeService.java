@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmployeeService {
@@ -12,7 +14,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
 
 
-    public Employee createEmployee(Employee e){
+     Employee createEmployee(Employee e){
 
         validateEmployee(e);
         Employee saved = employeeRepository.save(e);
@@ -21,7 +23,7 @@ public class EmployeeService {
 
     }
 
-    public Employee updateEmployee(Employee e){
+     Employee updateEmployee(Employee e){
 
         if(!employeeRepository.existsById(e.getId()) || e.getId() == null){
 
@@ -35,7 +37,7 @@ public class EmployeeService {
     }
 
 
-    public void deleteEmployee(Long id){
+     void deleteEmployee(Long id){
 
         if(id == null){
             throw new IllegalArgumentException("Could not find Id of user");
@@ -47,6 +49,23 @@ public class EmployeeService {
 
         employeeRepository.deleteById(id);
 
+    }
+
+     Employee findEmployee(Long id){
+        if(id == null) throw new IllegalArgumentException("Id not provided");
+
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    }
+
+     List<Employee> findAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+
+        if (employees.isEmpty()) {
+            throw new EntityNotFoundException("No employees found in the database");
+        }
+
+        return employees;
     }
 
     void validateEmployee(Employee e){
@@ -70,12 +89,6 @@ public class EmployeeService {
 
     }
 
-    public Employee findEmployee(Long id){
-        if(id == null) throw new IllegalArgumentException("Id not provided");
-
-        return employeeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found"));
-    }
 
 
 
