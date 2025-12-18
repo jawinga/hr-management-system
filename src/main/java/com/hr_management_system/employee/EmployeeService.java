@@ -14,28 +14,26 @@ public class EmployeeService {
 
     public Employee createEmployee(Employee e){
 
-        if(!e.isValidSalary()) {
-            throw new IllegalArgumentException("Salary must be between position's min and max range");
-        }
-
-        if((e.getFirstName() == null || e.getFirstName().isEmpty() || e.getLastName() == null || e.getLastName().isEmpty())){
-            throw new IllegalArgumentException("Employee must have first and last name");
-        }
-
-        if(e.getEmail().isEmpty()){
-            throw new IllegalArgumentException("Employee must have company email");
-        }
-
-        if(!companyEmailIsUnique(e.getCompanyEmail())) {
-            throw new IllegalArgumentException("Please use a unique email");
-
-        }
-
-        employeeRepository.save(e);
-        System.out.println(e);
-        return  e;
+        validateEmployee(e);
+        Employee saved = employeeRepository.save(e);
+        System.out.println(saved);
+        return saved;
 
     }
+
+    public Employee updateEmployee(Employee e){
+
+        if(!employeeRepository.existsById(e.getId()) || e.getId() == null){
+
+            throw new EntityNotFoundException("Employee with ID " + e.getId() + " not found");
+
+        }
+
+        validateEmployee(e);
+        return employeeRepository.save(e);
+
+    }
+
 
     public void deleteEmployee(Long id){
 
@@ -51,12 +49,36 @@ public class EmployeeService {
 
     }
 
+    void validateEmployee(Employee e){
 
-    boolean companyEmailIsUnique(String email){
+            if(!e.isValidSalary()) {
+                throw new IllegalArgumentException("Salary must be between position's min and max range");
+            }
 
-        return !employeeRepository.existsByCompanyEmail(email);
+            if((e.getFirstName() == null || e.getFirstName().isEmpty() || e.getLastName() == null || e.getLastName().isEmpty())){
+                throw new IllegalArgumentException("Employee must have first and last name");
+            }
+
+            if(e.getEmail().isEmpty()){
+                throw new IllegalArgumentException("Employee must have company email");
+            }
+
+            if(!companyEmailIsUnique(e.getCompanyEmail(), e.getId())){
+                throw new IllegalArgumentException("Please use a unique email");
+
+            }
+
     }
 
+
+
+    private boolean companyEmailIsUnique(String email, Long excludeId) {
+        if (excludeId == null) {
+            return !employeeRepository.existsByCompanyEmail(email);
+        } else {
+            return !employeeRepository.existsByCompanyEmailAndIdNot(email, excludeId);
+        }
+    }
 
 
 

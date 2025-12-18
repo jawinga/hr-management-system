@@ -34,6 +34,18 @@ public class EmployeeController {
         }
     }
 
+    @PutMapping("/employees/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable("id")Long id, @Valid @RequestBody Employee e){
+
+        if(!id.equals(e.getId())){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e);
+        }
+
+        Employee employee = employeeService.updateEmployee(e);
+        return ResponseEntity.status(HttpStatus.OK).body(employee);
+
+    }
+
 
 
 }
