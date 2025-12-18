@@ -11,7 +11,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
 
 
-    Employee createEmployee(Employee e){
+    public Employee createEmployee(Employee e){
 
         if(!e.isValidSalary()) {
             throw new IllegalArgumentException("Salary must be between position's min and max range");
@@ -22,7 +22,7 @@ public class EmployeeService {
         }
 
         if(e.getEmail().isEmpty()){
-            throw new IllegalArgumentException("Employee must have email");
+            throw new IllegalArgumentException("Employee must have company email");
         }
 
         if(!companyEmailIsUnique(e.getCompanyEmail())) {
@@ -31,6 +31,7 @@ public class EmployeeService {
         }
 
         employeeRepository.save(e);
+        System.out.println(e);
         return  e;
 
     }
