@@ -63,7 +63,6 @@ public class Employee {
                 && salary.compareTo(position.getMaxSalary()) <= 0;
     }
 
-
     public Long getId() {
         return id;
     }
@@ -150,6 +149,14 @@ public class Employee {
 
     public void setSalary(BigDecimal salary) {
         this.salary = salary;
+    }
+
+    public List<Department> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(List<Department> departments) {
+        this.departments = departments;
     }
 
     public Position getPosition() {
