@@ -23,7 +23,7 @@ public class Department {
     private String contactDept;
     @ManyToOne
     private Employee head;
-    @ManyToMany
+    @ManyToMany(mappedBy = "departments")
     private List<Employee> employees;
     public String getDepartmentDescription() {
         return departmentName != null ? departmentName.getDescription() : null;

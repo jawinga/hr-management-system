@@ -12,9 +12,6 @@ public class Position {
 
     private String positionTitle;
 
-    @Enumerated(EnumType.STRING)
-    private PositionDepartment department;
-
     private BigDecimal minSalary;
     private BigDecimal maxSalary;
 
@@ -38,13 +35,6 @@ public class Position {
         this.positionTitle = positionTitle;
     }
 
-    public PositionDepartment getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(PositionDepartment department) {
-        this.department = department;
-    }
 
     public BigDecimal getMinSalary() {
         return minSalary;

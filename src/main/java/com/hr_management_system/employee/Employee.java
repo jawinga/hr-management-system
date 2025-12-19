@@ -1,5 +1,6 @@
 package com.hr_management_system.employee;
 
+import com.hr_management_system.department.Department;
 import com.hr_management_system.position.Position;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
@@ -14,6 +15,7 @@ import jakarta.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -43,6 +45,9 @@ public class Employee {
     private Integer socialSecurity;
     private Integer bankDetails;
     private BigDecimal salary;
+
+    @ManyToMany
+    private List<Department> departments;
 
     @ManyToOne
     @JoinColumn(name = "position_id")
