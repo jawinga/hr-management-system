@@ -89,9 +89,6 @@ public class EmployeeService {
 
 
 
-
-
-
     private boolean companyEmailIsUnique(String email, Long excludeId) {
         if (excludeId == null) {
             return !employeeRepository.existsByCompanyEmail(email);
