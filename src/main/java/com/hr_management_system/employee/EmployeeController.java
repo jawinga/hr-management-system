@@ -15,10 +15,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/employees")
-@RequiredArgsConstructor
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     @PostMapping
     public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee e){
@@ -63,14 +66,13 @@ public class EmployeeController {
         }catch (EntityNotFoundException e){
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
 
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllEmployees() {
+    public ResponseEntity<List<Employee>> getAllEmployees() {
 
             List<Employee> list = employeeService.findAllEmployees();
             return ResponseEntity.ok(list);

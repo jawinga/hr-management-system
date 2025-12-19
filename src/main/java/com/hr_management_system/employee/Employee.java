@@ -40,8 +40,8 @@ public class Employee {
 
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
-    private int socialSecurity;
-    private int bankDetails;
+    private Integer socialSecurity;
+    private Integer bankDetails;
     private BigDecimal salary;
 
     @ManyToOne
@@ -50,11 +50,14 @@ public class Employee {
 
     @AssertTrue(message = "Salary is out of the allowed range")
     public boolean isValidSalary(){
+        if(salary == null || position == null) return true;
 
-        if(salary == null || position == null || position.getMinSalary() == null || position.getMaxSalary() == null ) return false;
-        return salary.compareTo(position.getMinSalary()) >= 0 && salary.compareTo(position.getMaxSalary()) <=0;
+        if(position.getMinSalary() == null || position.getMaxSalary() == null) return true;
 
+        return salary.compareTo(position.getMinSalary()) >= 0
+                && salary.compareTo(position.getMaxSalary()) <= 0;
     }
+
 
     public Long getId() {
         return id;
@@ -80,21 +83,20 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
     public String getCompanyEmail() {
         return companyEmail;
     }
 
     public void setCompanyEmail(String companyEmail) {
         this.companyEmail = companyEmail;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
@@ -121,19 +123,19 @@ public class Employee {
         this.role = role;
     }
 
-    public int getSocialSecurity() {
+    public Integer getSocialSecurity() {
         return socialSecurity;
     }
 
-    public void setSocialSecurity(int socialSecurity) {
+    public void setSocialSecurity(Integer socialSecurity) {
         this.socialSecurity = socialSecurity;
     }
 
-    public int getBankDetails() {
+    public Integer getBankDetails() {
         return bankDetails;
     }
 
-    public void setBankDetails(int bankDetails) {
+    public void setBankDetails(Integer bankDetails) {
         this.bankDetails = bankDetails;
     }
 
@@ -152,7 +154,4 @@ public class Employee {
     public void setPosition(Position position) {
         this.position = position;
     }
-
-
-
 }

@@ -1,6 +1,7 @@
 package com.hr_management_system.employee;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,13 +9,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    public EmployeeService(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
 
-     Employee createEmployee(Employee e){
+    Employee createEmployee(Employee e){
 
         validateEmployee(e);
         Employee saved = employeeRepository.save(e);
@@ -59,13 +62,8 @@ public class EmployeeService {
     }
 
      List<Employee> findAllEmployees() {
-        List<Employee> employees = employeeRepository.findAll();
 
-        if (employees.isEmpty()) {
-            throw new EntityNotFoundException("No employees found in the database");
-        }
-
-        return employees;
+        return employeeRepository.findAll();
     }
 
     void validateEmployee(Employee e){
