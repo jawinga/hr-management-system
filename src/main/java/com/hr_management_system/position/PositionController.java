@@ -45,7 +45,7 @@ public class PositionController {
 
         List<Position> list = positionService.findAllPositions();
         return ResponseEntity.ok(list);
-        
+
     }
 
 
@@ -64,7 +64,7 @@ public class PositionController {
     public ResponseEntity<Position> updatePosition(@PathVariable("id")Long id, @Valid @RequestBody Position p){
 
         if(!p.getId().equals(id)){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(p);
         }
 
         Position position = positionService.updatePosition(p);
