@@ -19,5 +19,7 @@ public enum DepartmentEnum {
         this.description = description;
     }
 
-
+    public String getDescription() {
+        return description;
+    }
 }
