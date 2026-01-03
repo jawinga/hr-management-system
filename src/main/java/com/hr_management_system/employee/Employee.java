@@ -1,5 +1,7 @@
 package com.hr_management_system.employee;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hr_management_system.department.Department;
 import com.hr_management_system.position.Position;
 import jakarta.persistence.*;
@@ -47,6 +49,7 @@ public class Employee {
     private BigDecimal salary;
 
     @ManyToMany
+    @JsonIgnore
     private List<Department> departments;
 
     @ManyToOne

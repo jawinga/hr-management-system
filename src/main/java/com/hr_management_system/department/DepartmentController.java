@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/department")
+@RequestMapping("/departments")
 public class DepartmentController {
 
     private final DepartmentService departmentService;
@@ -65,7 +65,7 @@ public class DepartmentController {
         }
 
         Department department = departmentService.updateDepartment(d);
-        return ResponseEntity.status(HttpStatus.OK).body(d);
+        return ResponseEntity.status(HttpStatus.OK).body(department);
 
     }
 

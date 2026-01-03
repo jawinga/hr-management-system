@@ -1,5 +1,7 @@
 package com.hr_management_system.department;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hr_management_system.employee.Employee;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -26,6 +28,7 @@ public class Department {
     @ManyToOne
     private Employee head;
     @ManyToMany(mappedBy = "departments")
+    @JsonIgnore
     private List<Employee> employees;
     public String getDepartmentDescription() {
         return departmentName != null ? departmentName.getDescription() : null;
