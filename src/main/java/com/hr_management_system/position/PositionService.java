@@ -19,7 +19,7 @@ public class PositionService {
 
     Position createPosition(Position position){
 
-        if(positionRepository.existsByName(position.getPositionTitle())){
+        if(positionRepository.existsByPositionTitle(position.getPositionTitle())){
             throw new RuntimeException("Position already exists!");
         }
         System.out.println(position);
