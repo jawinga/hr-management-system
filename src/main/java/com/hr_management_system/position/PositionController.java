@@ -63,9 +63,11 @@ public class PositionController {
     @PutMapping("/{id}")
     public ResponseEntity<Position> updatePosition(@PathVariable("id")Long id, @Valid @RequestBody Position p){
 
-        if(!p.getId().equals(id)){
+        if(p.getId() != null && !p.getId().equals(id) ){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(p);
         }
+
+        p.setId(id);
 
         Position position = positionService.updatePosition(p);
 
