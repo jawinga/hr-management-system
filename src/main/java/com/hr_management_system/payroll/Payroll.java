@@ -2,10 +2,7 @@ package com.hr_management_system.payroll;
 
 
 import com.hr_management_system.employee.Employee;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -21,9 +18,11 @@ import java.time.LocalDate;
 public class Payroll {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
 
@@ -41,12 +40,15 @@ public class Payroll {
     @DateTimeFormat
     private LocalDate endDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PayrollMethodEnum paymentMethod;
 
-    private String paymentMethod;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PayrollStatusEnum paymentStatus;
 
-    private String paymentStatus;
-
-    @AssertTrue(message = "Payment method is not valid")
+    /*@AssertTrue(message = "Payment method is not valid")
     public boolean isValidPaymentMethod(){
         return paymentMethod.equals("deposit") || paymentMethod.equals("check") ||
                 paymentMethod.equals("cash") || paymentMethod.equals("paypal") ||
@@ -59,7 +61,7 @@ public class Payroll {
                 paymentStatus.equals("complete") || paymentStatus.equals("failed");
     }
 
-
+*/
 
 
 
