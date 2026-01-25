@@ -25,20 +25,22 @@ public class Payroll {
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
-
-    @DateTimeFormat
+    @Column(nullable = false)
     private LocalDate paymentDate;
 
-    private BigDecimal salary;
-
-    private Long netSalary;
-
-
-    @DateTimeFormat
+    @Column(nullable = false)
     private LocalDate startDate;
 
-    @DateTimeFormat
+    @Column(nullable = false)
     private LocalDate endDate;
+
+    private BigDecimal baseSalary;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal grossSalary;
+
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal netSalary;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -47,6 +49,25 @@ public class Payroll {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PayrollStatusEnum paymentStatus;
+
+    private BigDecimal overtimeHours;
+    private BigDecimal overtimePay;
+    private BigDecimal bonuses;
+    private BigDecimal commissions;
+
+    private BigDecimal incomeTax;
+    private BigDecimal socialSecurity;
+    private BigDecimal healthInsurance;
+    private BigDecimal pensionContribution;
+    private BigDecimal otherDeductions;
+
+    private String processedBy;
+
+    @Column(length = 500)
+    private String notes;  // For any special remarks
+
+    private String payslipDocumentUrl;  // Link to generated payslip PDF
+
 
     /*@AssertTrue(message = "Payment method is not valid")
     public boolean isValidPaymentMethod(){
