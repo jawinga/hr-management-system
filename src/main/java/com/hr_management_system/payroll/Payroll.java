@@ -4,8 +4,12 @@ package com.hr_management_system.payroll;
 import com.hr_management_system.employee.Employee;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,7 +25,7 @@ public class Payroll {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
@@ -34,6 +38,7 @@ public class Payroll {
     @Column(nullable = false)
     private LocalDate endDate;
 
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal baseSalary;
 
     @Column(nullable = false, precision = 19, scale = 2)
@@ -50,23 +55,41 @@ public class Payroll {
     @Column(nullable = false)
     private PayrollStatusEnum paymentStatus;
 
+    @Column(nullable = true)
     private BigDecimal overtimeHours;
+
+    @Column(nullable = true, precision = 19, scale = 2)
     private BigDecimal overtimePay;
+
+    @Column(nullable = true, precision = 19, scale = 2)
     private BigDecimal bonuses;
+
+    @Column(nullable = true, precision = 19, scale = 2)
     private BigDecimal commissions;
 
+    @Column(nullable = false)
+    @DecimalMin(value = "0.0", inclusive = true)
+    @DecimalMax(value = "100.0", inclusive = true)
     private BigDecimal incomeTax;
+
+    @Column(nullable = false)
     private BigDecimal socialSecurity;
+
+    @Column(nullable = false)
     private BigDecimal healthInsurance;
+
+    @Column(nullable = true, precision = 19, scale = 2)
     private BigDecimal pensionContribution;
-    private BigDecimal otherDeductions;
 
     private String processedBy;
 
-    @Column(length = 500)
+    @Column(nullable = true, length = 500)
     private String notes;  // For any special remarks
 
-    private String payslipDocumentUrl;  // Link to generated payslip PDF
+    @Column(nullable = false)
+    @URL(message = "Please provide a valid URL")
+    @NotBlank
+    private String payslipDocumentUrl;
 
 
     /*@AssertTrue(message = "Payment method is not valid")
