@@ -2,6 +2,7 @@ package com.hr_management_system.payroll;
 
 
 import com.hr_management_system.employee.Employee;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,18 @@ public class PayrollController {
         return ResponseEntity.status(HttpStatus.CREATED).body(payroll);
 
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePayroll(@PathVariable("id") Long id) {
+        try {
+            payrollService.deletePayroll(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 
 
 }

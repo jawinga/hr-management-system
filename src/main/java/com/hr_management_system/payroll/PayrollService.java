@@ -18,5 +18,10 @@ public class PayrollService {
         return  p;
     }
 
+    void deletePayroll(Long id){
+
+
+    }
+
 
 }
