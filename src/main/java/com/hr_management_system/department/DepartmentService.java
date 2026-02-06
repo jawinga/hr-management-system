@@ -46,7 +46,7 @@ public class DepartmentService {
     void deleteDepartment(Long id){
 
         if(!departmentRepository.existsById(id)){
-            throw new RuntimeException("Department could not be found!");
+            throw new EntityNotFoundException("Department could not be found!");
 
         }
 

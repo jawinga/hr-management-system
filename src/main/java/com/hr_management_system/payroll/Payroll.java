@@ -3,15 +3,14 @@ package com.hr_management_system.payroll;
 
 import com.hr_management_system.employee.Employee;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.URL;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,6 +18,8 @@ import java.time.LocalDate;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Payroll {
 
     @Id
@@ -84,36 +85,10 @@ public class Payroll {
     private String processedBy;
 
     @Column(nullable = true, length = 500)
-    private String notes;  // For any special remarks
+    private String notes;
 
     @Column(nullable = false)
     @URL(message = "Please provide a valid URL")
     @NotBlank
     private String payslipDocumentUrl;
-
-
-    /*@AssertTrue(message = "Payment method is not valid")
-    public boolean isValidPaymentMethod(){
-        return paymentMethod.equals("deposit") || paymentMethod.equals("check") ||
-                paymentMethod.equals("cash") || paymentMethod.equals("paypal") ||
-                paymentMethod.equals("wire") || paymentMethod.equals("other");
-    }
-
-    @AssertTrue(message = "Payment status is not valid")
-    public boolean isPaymentStatusValid(){
-        return paymentStatus.equals("pending") || paymentStatus.equals("ongoing") ||
-                paymentStatus.equals("complete") || paymentStatus.equals("failed");
-    }
-
-*/
-
-
-
-
-
-
-
-
-
-
 }

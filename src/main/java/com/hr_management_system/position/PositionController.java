@@ -1,7 +1,6 @@
 package com.hr_management_system.position;
 
 
-import com.hr_management_system.employee.Employee;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,7 @@ public class PositionController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Position> getPosition(@PathVariable Long id){
-
+    public ResponseEntity<?> getPosition(@PathVariable Long id){
 
         try{
             Position position = positionService.findPosition(id);
@@ -35,13 +33,13 @@ public class PositionController {
         }catch (EntityNotFoundException e){
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body((Position) errorResponse);
-
-    }}
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        }
+    }
 
 
     @GetMapping
-    public ResponseEntity<List<Position>> getAllEmployees() {
+    public ResponseEntity<List<Position>> getAllPositions() {
 
         List<Position> list = positionService.findAllPositions();
         return ResponseEntity.ok(list);

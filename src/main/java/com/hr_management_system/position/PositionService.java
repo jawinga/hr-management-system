@@ -44,7 +44,7 @@ public class PositionService {
     void deletePosition(Long id){
 
         if(!positionRepository.existsById(id)){
-            throw new RuntimeException("Department could not be found!");
+            throw new EntityNotFoundException("Position could not be found!");
 
         }
 
@@ -57,7 +57,7 @@ public class PositionService {
     Position updatePosition(Position position){
 
         if(!positionRepository.existsById(position.getId())){
-            throw new EntityNotFoundException("Department with ID " + position.getId() + " not found");
+            throw new EntityNotFoundException("Position with ID " + position.getId() + " not found");
 
         }
 

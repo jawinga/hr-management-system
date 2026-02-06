@@ -90,7 +90,7 @@ Based on recent commits:
 - Create descriptive commit messages
 - Stage specific files rather than using `git add .`
 - Test changes before committing
-- Ask before force-pushing or destructive operations
+- Ask before force-pushing or destructive operations/
 
 ## Common Commands
 
