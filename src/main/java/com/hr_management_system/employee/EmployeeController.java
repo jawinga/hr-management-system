@@ -1,17 +1,12 @@
 package com.hr_management_system.employee;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/employees")
@@ -24,61 +19,33 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<Employee> addEmployee(@Valid @RequestBody Employee e){
-
-        Employee employee = employeeService.createEmployee(e);
+    public ResponseEntity<EmployeeResponse> addEmployee(@Valid @RequestBody EmployeeRequest request) {
+        EmployeeResponse employee = employeeService.createEmployee(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(employee);
-
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("id") Long id) {
-        try {
-            employeeService.deleteEmployee(id);
-            return ResponseEntity.noContent().build();
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable("id")Long id, @Valid @RequestBody Employee e){
-
-        if(!id.equals(e.getId())){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e);
-        }
-
-        Employee employee = employeeService.updateEmployee(e);
-        return ResponseEntity.status(HttpStatus.OK).body(employee);
-
+    public ResponseEntity<EmployeeResponse> updateEmployee(@PathVariable("id") Long id,
+                                                           @Valid @RequestBody EmployeeRequest request) {
+        EmployeeResponse employee = employeeService.updateEmployee(id, request);
+        return ResponseEntity.ok(employee);
     }
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<?> getEmployee(@PathVariable("id") Long id){
-
-        try{
-
-            Employee employee = employeeService.findEmployee(id);
-            return ResponseEntity.status(HttpStatus.OK).body(employee);
-
-
-        }catch (EntityNotFoundException e){
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }
-
+    public ResponseEntity<EmployeeResponse> getEmployee(@PathVariable("id") Long id) {
+        EmployeeResponse employee = employeeService.findEmployee(id);
+        return ResponseEntity.ok(employee);
     }
 
     @GetMapping
-    public ResponseEntity<List<Employee>> getAllEmployees() {
-
-            List<Employee> list = employeeService.findAllEmployees();
-            return ResponseEntity.ok(list);
-
+    public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(@PageableDefault(size = 20) Pageable pageable) {
+        Page<EmployeeResponse> page = employeeService.findAllEmployees(pageable);
+        return ResponseEntity.ok(page);
     }
-
-
-
 }

@@ -1,68 +1,72 @@
 package com.hr_management_system.position;
 
-import com.hr_management_system.department.Department;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class PositionService {
 
-    @Autowired
+    private static final Logger log = LoggerFactory.getLogger(PositionService.class);
+
     private final PositionRepository positionRepository;
 
     public PositionService(PositionRepository positionRepository) {
         this.positionRepository = positionRepository;
     }
 
-    Position createPosition(Position position){
-
-        if(positionRepository.existsByPositionTitle(position.getPositionTitle())){
+    PositionResponse createPosition(PositionRequest request) {
+        if (positionRepository.existsByPositionTitle(request.getPositionTitle())) {
             throw new RuntimeException("Position already exists!");
         }
-        System.out.println(position);
-        return positionRepository.save(position);
 
+        Position position = mapRequestToEntity(request);
+        Position saved = positionRepository.save(position);
+        log.info("Created position with ID {}", saved.getId());
+        return PositionResponse.fromEntity(saved);
     }
 
-    Position findPosition(Long id){
-        if(id == null) throw new IllegalArgumentException("Id not provided");
+    PositionResponse findPosition(Long id) {
+        if (id == null) throw new IllegalArgumentException("Id not provided");
 
-        return positionRepository.findById(id)
+        Position position = positionRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Position not found"));
+        return PositionResponse.fromEntity(position);
     }
 
-    List<Position> findAllPositions(){
-
-        return positionRepository.findAll();
-
+    Page<PositionResponse> findAllPositions(Pageable pageable) {
+        return positionRepository.findAll(pageable).map(PositionResponse::fromEntity);
     }
 
-
-    void deletePosition(Long id){
-
-        if(!positionRepository.existsById(id)){
+    void deletePosition(Long id) {
+        if (!positionRepository.existsById(id)) {
             throw new EntityNotFoundException("Position could not be found!");
-
         }
-
         positionRepository.deleteById(id);
-
-
+        log.info("Deleted position with ID {}", id);
     }
 
-
-    Position updatePosition(Position position){
-
-        if(!positionRepository.existsById(position.getId())){
-            throw new EntityNotFoundException("Position with ID " + position.getId() + " not found");
-
+    PositionResponse updatePosition(Long id, PositionRequest request) {
+        if (!positionRepository.existsById(id)) {
+            throw new EntityNotFoundException("Position with ID " + id + " not found");
         }
 
-        return positionRepository.save(position);
+        Position position = mapRequestToEntity(request);
+        position.setId(id);
 
+        Position saved = positionRepository.save(position);
+        log.info("Updated position with ID {}", saved.getId());
+        return PositionResponse.fromEntity(saved);
     }
 
+    private Position mapRequestToEntity(PositionRequest request) {
+        Position position = new Position();
+        position.setPositionTitle(request.getPositionTitle());
+        position.setMinSalary(request.getMinSalary());
+        position.setMaxSalary(request.getMaxSalary());
+        return position;
+    }
 }

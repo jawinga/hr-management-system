@@ -1,16 +1,12 @@
 package com.hr_management_system.position;
 
-
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/positions")
@@ -22,75 +18,34 @@ public class PositionController {
         this.positionService = positionService;
     }
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPosition(@PathVariable Long id){
-
-        try{
-            Position position = positionService.findPosition(id);
-            return ResponseEntity.status(HttpStatus.OK).body(position);
-
-        }catch (EntityNotFoundException e){
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-        }
+    public ResponseEntity<PositionResponse> getPosition(@PathVariable Long id) {
+        PositionResponse position = positionService.findPosition(id);
+        return ResponseEntity.ok(position);
     }
-
 
     @GetMapping
-    public ResponseEntity<List<Position>> getAllPositions() {
-
-        List<Position> list = positionService.findAllPositions();
-        return ResponseEntity.ok(list);
-
+    public ResponseEntity<Page<PositionResponse>> getAllPositions(@PageableDefault(size = 20) Pageable pageable) {
+        Page<PositionResponse> page = positionService.findAllPositions(pageable);
+        return ResponseEntity.ok(page);
     }
 
-
-
-
     @PostMapping
-    public ResponseEntity<Position> addPosition(@Valid @RequestBody Position p){
-
-        Position position = positionService.createPosition(p);
-
+    public ResponseEntity<PositionResponse> addPosition(@Valid @RequestBody PositionRequest request) {
+        PositionResponse position = positionService.createPosition(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(position);
-
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Position> updatePosition(@PathVariable("id")Long id, @Valid @RequestBody Position p){
-
-        if(p.getId() != null && !p.getId().equals(id) ){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(p);
-        }
-
-        p.setId(id);
-
-        Position position = positionService.updatePosition(p);
-
-        return ResponseEntity.status(HttpStatus.OK).body(position);
-
+    public ResponseEntity<PositionResponse> updatePosition(@PathVariable("id") Long id,
+                                                           @Valid @RequestBody PositionRequest request) {
+        PositionResponse position = positionService.updatePosition(id, request);
+        return ResponseEntity.ok(position);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePosition(@PathVariable("id")Long id){
-
-        try{
-
-            positionService.deletePosition(id);
-            return ResponseEntity.noContent().build();
-
-
-        }catch (EntityNotFoundException e){
-            return ResponseEntity.notFound().build();
-
-
-        }
-
-
+    public ResponseEntity<Void> deletePosition(@PathVariable("id") Long id) {
+        positionService.deletePosition(id);
+        return ResponseEntity.noContent().build();
     }
-
-
-
 }

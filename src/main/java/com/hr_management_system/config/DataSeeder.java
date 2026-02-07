@@ -8,7 +8,8 @@ import com.hr_management_system.employee.EmployeeRepository;
 import com.hr_management_system.employee.EmployeeRole;
 import com.hr_management_system.position.Position;
 import com.hr_management_system.position.PositionRepository;
-import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,9 @@ import java.util.List;
 
 @Component
 public class DataSeeder implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
+
 
 
     private final DepartmentRepository departmentRepository;
@@ -34,7 +38,7 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        System.out.println("CommandLineRunner started");
+        log.info("DataSeeder started");
 
         departmentRepository.deleteAll();
         positionRepository.deleteAll();
@@ -125,7 +129,7 @@ public class DataSeeder implements CommandLineRunner {
         mike.setDepartments(List.of(hr, sales));
         employeeRepository.save(mike);
 
-        System.out.println("Seeding ended.");
+        log.info("Seeding completed successfully");
     }
 }
 
